@@ -63,12 +63,7 @@
     JCInfoController *info = [[JCInfoController alloc]init];
     [self addChildVc:info title:@"个人中心" image:@"tabbar_profile" selectedImage:@"tabbar_profile_selected"];
     
-    UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 49)];
-    backView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Stars"]];
-    [self.tabBarController.tabBar insertSubview:backView atIndex:0];
-    self.tabBarController.tabBar.opaque = YES;
-    
-    
+  
     //更换系统自带的tabbar
 //    JCTabBar *tabBar = [[JCTabBar alloc]init];
 //    tabBar.delegate = self;

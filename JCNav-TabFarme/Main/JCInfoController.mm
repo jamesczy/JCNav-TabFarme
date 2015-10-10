@@ -4,7 +4,7 @@
 //
 //  Created by jamesczy on 15/7/27.
 //  Copyright (c) 2015年 im360 immersive. All rights reserved.
-//  个人信息
+//  个人中心
 
 #import "JCInfoController.h"
 #import "UIView+Extension.h"

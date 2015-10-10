@@ -10,6 +10,7 @@
 #import "UIView+Extension.h"
 #import "JCPlayPauseView.h"
 #import "JCMideoModeView.h"
+#import "JCConst.h"
 
 @interface JCLocalVideoController () <JCPlayPauseViewDelegate,JCMideoModeViewDelegate>
 /** 播放暂停栏 */
@@ -99,6 +100,7 @@ public:
     [self setupToolbar];
     
     [self setupLookMode];
+    
 }
 -(void)setnavUp
 {
@@ -128,10 +130,8 @@ public:
     if (selecteIndex == 0) {
 
         scene->setLookFlags(im360::scene::BasicScene::LM_FINGER | im360::scene::BasicScene::LM_GRAVITY | im360::scene::BasicScene::LM_MOTION);
-//        NSLog(@"LM_MOTION");
     }else{
         scene->setLookFlags(im360::scene::BasicScene::LM_FINGER);
-//        NSLog(@"LM_FINGER");
     }
     NSLog(@"LookFlags %d",scene->getLookFlags());
 }
@@ -155,20 +155,7 @@ public:
     self.modeView.hidden = !self.modeView.isHidden;
     
 }
-/**
-     enum LookMode
-     {
-     LM_FINGER = 1,          // (mutualy exclusive with LM_HOLD_AND_DRAG)
-     LM_GRAVITY = 2,
-     LM_MOTION = 4,
-     LM_HOLD_AND_DRAG = 8    // (mutualy exclusive with LM_FINGER)
-     };
-     
-     void setLookFlags(int flags);
-     int getLookFlags();
-     void resetMotionData();
-     
- */
+
 -(void)setupToolbar
 {
     JCPlayPauseView *toolbar = [[JCPlayPauseView alloc]init ];
@@ -180,6 +167,8 @@ public:
     [self.view addSubview:toolbar];
     self.toolbar = toolbar;
 }
+
+#pragma mark - 其它方法 -
 -(void)cancel
 {
     [_im360View stopAnimation];
@@ -249,18 +238,45 @@ public:
     self.view.frame = (CGRect){ { f.origin.x, f.origin.y },self.view.frame.size};
     [UIView commitAnimations];
 }
-
-
+//获取当前播放的时间
+-(CGFloat)getTimeOfVideo
+{
+    if( !_player) return 0;
+    scene::BasicScene::pointer scene = _player->getScene<scene::BasicScene>();
+    if( !scene ) return 0;
+    CGFloat playTime = scene->getTime();
+//    CGFloat durationTime = scene->getDuration();
+//    NSLog(@"playTime:%0.2f",playTime);
+    return  playTime;
+}
+//设置当前的播放时间
+-(void)setTimeOfVideo
+{
+    NSLog(@"setTimeOfVideo");
+    if( !_player) return;
+    scene::BasicScene::pointer scene = _player->getScene<scene::BasicScene>();
+    if( !scene ) return;
+    CGFloat timeValue = self.toolbar.progressBarView.value * scene->getDuration();
+    NSInteger intTimeValue = ceilf(timeValue);
+    scene->setTime(intTimeValue);
+}
+-(void)starPlay
+{
+    if (_starTimer) return;
+    _starTimer = [NSTimer scheduledTimerWithTimeInterval:1.0/3.0 target:self selector:@selector(getTimeOfVideo) userInfo:nil repeats:YES];
+}
+-(void)stopPlay
+{
+    if (!_starTimer) return;
+    [_starTimer invalidate];
+    _starTimer = nil;
+}
 //设置暂停和播放
 - (void)setPlaybarBtnStates
 {
     if( !_player) return;
-    
     scene::BasicScene::pointer scene = _player->getScene<scene::BasicScene>();
-    if( !scene )
-    {
-        return;
-    }
+    if( !scene ) return;
     //    _rewindBtn.enabled = scene->getTime()>0;
     if( scene->getPaused() /*&& _playbar.items!=_playbarItemsPlay */)
     {
@@ -271,7 +287,7 @@ public:
     }
     else if( !scene->getPaused() /* && _playbar.items!=_playbarItemsPause */)
     {
-        
+        [self getTimeOfVideo];
         scene->setPaused(YES);
         [self.toolbar.playPauseBtn setImage:[UIImage imageNamed:@"moviePlay@2x.png"] forState:UIControlStateNormal];
         //        [_playbar setItems:_playbarItemsPause animated:NO];
@@ -300,6 +316,7 @@ public:
             
             interfaceOrientation == UIInterfaceOrientationLandscapeRight );
 }
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     //控制导航栏的显示和隐藏
@@ -340,9 +357,9 @@ public:
     
     
     if ([self.videoURL isEqual: @""]) {
-        std::string videoURL = [[[NSBundle mainBundle]pathForResource:@"Bay.Bridge.Flying.Pass.2_11031_1280x506_f12_2M_a0.webm" ofType:nil]UTF8String];
-        std::string audeoURL = [[[NSBundle mainBundle]pathForResource:@"Bay.Bridge.Flying.Pass.2.mp3" ofType:nil]UTF8String];
-        scene->loadVideo(videoURL,audeoURL);
+//        std::string videoURL = [[[NSBundle mainBundle]pathForResource:@"Bay.Bridge.Flying.Pass.2_11031_1280x506_f12_2M_a0.webm" ofType:nil]UTF8String];
+//        std::string audeoURL = [[[NSBundle mainBundle]pathForResource:@"Bay.Bridge.Flying.Pass.2.mp3" ofType:nil]UTF8String];
+//        scene->loadVideo(videoURL,audeoURL);
     }else{
         std::string videoURL = [self.videoURL UTF8String];
         scene->loadVideo(videoURL);
@@ -367,8 +384,14 @@ public:
     
     [self setupToolbar];
     [self setupLookMode];
+    
+    [self starPlay];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(setTimeOfVideo) name:sliderValueChange object:nil];
 }
-
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
 #pragma mark - JCPlayPauseDelegate
 -(void)JCPlayPauseView:(JCPlayPauseView *)toolbar didClickButton:(JCPlayPauseViewButtonType)buttonType
 {
@@ -395,34 +418,17 @@ public:
     _player = _im360View.player;
     switch (buttonType) {
         case JCMideoModeTypeStandard:
-            NSLog(@"JCMideoModeTypeStandard");
             _player->setViewMode(im360::player::PlayerViewMode::STANDARD);
             break;
         case JCMideoModeTypeIs3DSide:
-            NSLog(@"JCMideoModeTypeIs3DSide");
             _player->setViewMode(im360::player::PlayerViewMode::SIDE_BY_SIDE_3D);
             break;
         case JCMideoModeTypeCancel:
-            NSLog(@"JCMideoModeTypeCancel");
             self.modeView.hidden = YES;
             break;
-            
         default:
             break;
     }
 }
-/**
-     enum Mode
-     {
-     STANDARD=0,
-     SIDE_BY_SIDE_3D,
-     TOP_BOTTOM_3D,
-     ANAGLYPH_3D,
-     
-     COUNT
-     };
- 
-     void setViewMode(PlayerViewMode::Mode mode);
-     PlayerViewMode::Mode getViewMode() const;
- */
+
 @end

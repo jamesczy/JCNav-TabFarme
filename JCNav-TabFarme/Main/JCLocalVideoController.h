@@ -12,6 +12,7 @@
 @interface JCLocalVideoController : UIViewController <IM360ViewDelegate>{
     IM360View *                     _im360View;
     im360::player::Player::pointer  _player;
+    NSTimer*                        _starTimer;
     void *                          _mediaData;
 }
 @property (nonatomic ,copy)NSString *videoURL;

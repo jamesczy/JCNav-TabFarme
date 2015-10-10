@@ -8,6 +8,7 @@
 
 #import "JCPlayPauseView.h"
 #import "UIView+Extension.h"
+#import "JCConst.h"
 
 @interface JCPlayPauseView()
 
@@ -27,6 +28,8 @@
         self.playPauseBtn =  [self setupBtn:@"moviePause@2x.png" hightImage:@"moviePlay@2x.png" type:JCPlayPauseViewButtonTypePlayPause];
         self.moveForwordBtn = [self setupBtn:@"movieForward@2x.png" hightImage:@"movieForwardSelected@2x.png" type:JCPlayPauseViewButtonTypeForward];
         UISlider *progressBarView = [[UISlider alloc] init];
+        [progressBarView addTarget:self action:@selector(getValueChange) forControlEvents:UIControlEventValueChanged];
+        progressBarView.continuous = NO;
         self.progressBarView = progressBarView;
         [self addSubview:progressBarView];
     }
@@ -51,12 +54,21 @@
         [self.delegate JCPlayPauseView:self didClickButton:(JCPlayPauseViewButtonType)btn.tag];
     }
 }
+-(void)getValueChange
+{
+    NSLog(@"getValueChange");
+//    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+//    userInfo[sliderValueChangeKey] = value;
+    
+    [[NSNotificationCenter defaultCenter]postNotificationName:sliderValueChange object:nil];
+}
+
 -(void)layoutSubviews
 {
     [super layoutSubviews];
     //设置所有按钮的frame
     NSUInteger count = self.subviews.count;
-    CGFloat btnW = self.width * 0.5 / count;
+    CGFloat btnW = self.width * 0.4 / count;
     CGFloat btnH = self.height;
     
     for (NSUInteger i = 0; i < count; i++) {
@@ -68,9 +80,9 @@
             btn.height = btnH;
         }else{
             UISlider *progressBarView = self.subviews[i];
-            progressBarView.x = self.width * 0.5 + 10;
+            progressBarView.x = self.width * 0.4 + 10;
             progressBarView.y = (self.height - progressBarView.height) * 0.5;
-            progressBarView.width = self.width * 0.5 - 20;
+            progressBarView.width = self.width * 0.6 - 30;
 //            progressBarView.height = self.height * 0.5 ;
         }
         

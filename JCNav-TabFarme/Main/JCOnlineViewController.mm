@@ -42,17 +42,20 @@ static NSString * const reuseIdentifier = @"Cell";
     
     return [super initWithCollectionViewLayout:layout];
 }
--(void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     // self.clearsSelectionOnViewWillAppear = NO;
 //    self.collectionView.backgroundColor = [UIColor whiteColor];
-    self.collectionView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"MenuBackground"]];
+    //拉伸背景图片
+    UIImage *image = [UIImage imageNamed:@"MenuBackground"];
+    image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(5,5,5,5) resizingMode:UIImageResizingModeStretch];
+    self.collectionView.layer.contents = (id)image.CGImage;
+    
+    self.collectionView.layer.backgroundColor = [UIColor clearColor].CGColor;
+    
     // Register cell classes
     [self.collectionView registerClass:[JCCollectionCell class] forCellWithReuseIdentifier:reuseIdentifier];
     
@@ -82,7 +85,9 @@ static NSString * const reuseIdentifier = @"Cell";
  
     self.titlePathArray = [self getFilenamelistOfType:@"mp4" fromDirPath:docsDir];
 }
-
+/**
+ 读取本地文件列表
+ */
 -(NSArray *)getFilenamelistOfType:(NSString *)type fromDirPath:(NSString *)dirPath
 {
     NSString *docsDir = [NSHomeDirectory() stringByAppendingPathComponent:  @"Documents"];

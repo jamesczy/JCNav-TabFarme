@@ -17,6 +17,7 @@ typedef enum {
 @protocol JCPlayPauseViewDelegate <NSObject>
 @optional
 -(void)JCPlayPauseView:(JCPlayPauseView *)toolbar didClickButton:(JCPlayPauseViewButtonType)buttonType;
+
 @end
 @interface JCPlayPauseView : UIView
 /** 暂停播放界面 */

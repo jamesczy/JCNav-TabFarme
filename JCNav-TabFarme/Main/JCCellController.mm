@@ -37,10 +37,15 @@ static NSString * const reuseIdentifier = @"Cell";
     layout.minimumLineSpacing = 5;
     //设置itme的左右两边间距
     layout.sectionInset = UIEdgeInsetsMake(0, 5, 0, 5);
-    //被选中的通知
+    //添加接受被选中的通知
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(selectedPlayList) name:selectedPlayListName object:nil];
     
     return [super initWithCollectionViewLayout:layout];
+}
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 #pragma mark - 监听方法
 -(void)selectedPlayList
@@ -75,7 +80,14 @@ static NSString * const reuseIdentifier = @"Cell";
     // Uncomment the following line to preserve selection between presentations
     // self.clearsSelectionOnViewWillAppear = NO;
 //    self.collectionView.backgroundColor = [UIColor whiteColor];
-    self.collectionView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Stars"]];
+    
+    
+    UIImage *image = [UIImage imageNamed:@"Stars"];
+    image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(5,5,5,5) resizingMode:UIImageResizingModeStretch];
+    self.collectionView.layer.contents = (id)image.CGImage;
+    
+    self.collectionView.layer.backgroundColor = [UIColor clearColor].CGColor;
+    
     UIButton *infoTitleButton = [[UIButton alloc]init];
     infoTitleButton.width = 150;
     infoTitleButton.height =30;

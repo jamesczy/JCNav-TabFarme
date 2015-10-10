@@ -59,7 +59,6 @@
 		BF67272B1BB15C0E00BBD518 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF67272A1BB15C0E00BBD518 /* Security.framework */; };
 		BF67272D1BB15C1B00BBD518 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF67272C1BB15C1B00BBD518 /* UIKit.framework */; };
 		BF67272F1BB15C2500BBD518 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF67272E1BB15C2500BBD518 /* Foundation.framework */; };
-		BF6727311BB15C2C00BBD518 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6727301BB15C2C00BBD518 /* SenTestingKit.framework */; };
 		BF6727931BB15C6500BBD518 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = BF6727351BB15C6500BBD518 /* Contents.json */; };
 		BF6727941BB15C6500BBD518 /* navigationbar_arrow_down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF6727361BB15C6500BBD518 /* navigationbar_arrow_down@2x.png */; };
 		BF6727951BB15C6500BBD518 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = BF6727381BB15C6500BBD518 /* Contents.json */; };
@@ -242,7 +241,6 @@
 		BF67272A1BB15C0E00BBD518 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BF67272C1BB15C1B00BBD518 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BF67272E1BB15C2500BBD518 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		BF6727301BB15C2C00BBD518 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		BF6727351BB15C6500BBD518 /* Contents.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
 		BF6727361BB15C6500BBD518 /* navigationbar_arrow_down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigationbar_arrow_down@2x.png"; sourceTree = "<group>"; };
 		BF6727381BB15C6500BBD518 /* Contents.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
@@ -328,7 +326,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF6727311BB15C2C00BBD518 /* SenTestingKit.framework in Frameworks */,
 				BF67272F1BB15C2500BBD518 /* Foundation.framework in Frameworks */,
 				BF67272D1BB15C1B00BBD518 /* UIKit.framework in Frameworks */,
 				BF67272B1BB15C0E00BBD518 /* Security.framework in Frameworks */,
@@ -359,7 +356,6 @@
 		BF5DF0C91BC6389B00AE39C4 /* FrameWork */ = {
 			isa = PBXGroup;
 			children = (
-				BF6727301BB15C2C00BBD518 /* SenTestingKit.framework */,
 				BF67272E1BB15C2500BBD518 /* Foundation.framework */,
 				BF67272C1BB15C1B00BBD518 /* UIKit.framework */,
 				BF67272A1BB15C0E00BBD518 /* Security.framework */,
@@ -920,6 +916,7 @@
 		BF67268A1BB14EFD00BBD518 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastTestingUpgradeCheck = 0700;
 				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = yingyi;
 				TargetAttributes = {
@@ -1217,10 +1214,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
 				CLANG_CXX_LIBRARY = "libstdc++";
+				COMPRESS_PNG_FILES = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(SDKROOT)/Developer/Library/Framework",
 				);
 				HEADER_SEARCH_PATHS = (
 					"values>",
@@ -1229,6 +1229,7 @@
 				INFOPLIST_FILE = "JCNav-TabFarme/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = TORNADOEYES;
 				VALID_ARCHS = " armv7 ";
 			};
@@ -1240,10 +1241,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
 				CLANG_CXX_LIBRARY = "libstdc++";
+				COMPRESS_PNG_FILES = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(SDKROOT)/Developer/Library/Framework",
 				);
 				HEADER_SEARCH_PATHS = (
 					"values>",
@@ -1252,6 +1256,7 @@
 				INFOPLIST_FILE = "JCNav-TabFarme/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = TORNADOEYES;
 				VALID_ARCHS = " armv7 ";
 			};

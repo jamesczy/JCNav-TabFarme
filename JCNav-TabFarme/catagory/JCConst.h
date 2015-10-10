@@ -25,4 +25,7 @@
 //被选中的播放通知
 #define selectedPlayListName @"selectedPlayListName"
 #define selectedPlayListKye @"selectedPlayListKye"
+
+#define sliderValueChange @"sliderValueChange"
+#define sliderValueChangeKey @"sliderValueChangeKey"
 #endif
